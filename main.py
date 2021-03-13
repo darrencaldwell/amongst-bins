@@ -102,9 +102,21 @@ def main_menu():
 #         # resize the image
 #         self.image = pygame.transform.scale(self.image, (20, 30))
 #         self.rect = self.image.get_rect() 
+SCREEN_WIDTH = 1080
+SCREEN_HEIGHT = 1920
+
+class Player(pygame.sprite.Sprite):
+
+    def __init__(self): 
+        super(Player, self).__init__()
+        pygame.sprite.Sprite.__init__(self) 
+        self.image = pygame.image.load('assets/bins/grey bin/grey_left.svg').convert() 
+        self.image = pygame.transform.scale(self.image, (300, 400))
+        self.rect = self.image.get_rect() 
 
 # pygame.init()
 
+pygame.init()
 
 # screen = pygame.display.set_mode((SCREEN_HEIGHT, SCREEN_WIDTH))
 # player = Player()
@@ -123,15 +135,10 @@ def main_menu():
 #         elif event.type == QUIT:
 #             running = False
 
-#     screen.fill((0, 0, 255))
+    screen.fill((255, 255, 255))
 
-#     player_center = (
-#         (SCREEN_WIDTH-screen.get_width())/2,
-#         (SCREEN_HEIGHT-screen.get_height())/2
-#     ) 
-
-#     screen.blit(player.image, player_center)
-#     pygame.display.flip()
+    screen.blit(player.image, (800,300))
+    pygame.display.flip()
 
 main_menu()
 pygame.quit()
