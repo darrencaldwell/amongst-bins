@@ -2,19 +2,24 @@ syntax = 'proto3';
 package protocol;
 option go_package = "github.com/CynicalCode21/amongst-bins/protocol";
 
+// 1
 message JoinGame {
 	string username = 1;
 }
+// 2
 message EchoJoinGame {
 	int32 player_id = 1;
 }
+// 3
 message PlayerPosition {
 	int64 x = 1;
 	int64 y = 2;
 }
+// 4
 message ClientMovement {
 	PlayerPosition player_pos = 1;
 }
+// 5
 message ServerPositionUpdate {
 	repeated PlayerPosition player_pos = 1;
 }

@@ -4,7 +4,7 @@
 // 	protoc        v3.12.4
 // source: protocol.proto
 
-package protocol
+package main
 
 import (
 	proto "github.com/golang/protobuf/proto"
