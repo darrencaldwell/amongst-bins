@@ -6,6 +6,9 @@
 	 "net"
 	 "os"
 	 "fmt"
+	 "io"
+//	 "encoding/binary"
+	 "bufio"
 	 "github.com/golang/protobuf/proto"
  )
  
@@ -32,19 +35,32 @@
  func handleClient(conn net.Conn) {
 	 // close connection on exit
 	 defer conn.Close()
+	 c := bufio.NewReader(conn)
 
 	 fmt.Println("connection made!")
  
-	 var buf [512]byte
 	 //infiniti boi to handle reqs from a client
 	 for {
-		 // read upto 512 bytes
-		 n, err := conn.Read(buf[0:])
+		// read size
+		var size uint8
+		size, err := c.ReadByte()
+		if err != nil {
+			return 
+		}
+		fmt.Println("A")
+		fmt.Println(size)
+		 // read upto size bytes
+		 buf := make([]byte, size)
+		 n, err := io.ReadFull(c, buf[:])
 		 if err != nil {
 			fmt.Println("couldn't read")
 			 return
 		 }
-		 fmt.Printf("readen %s", string(buf[:]))
+		 m := &JoinGame{}
+		 if err := proto.Unmarshal(buf, m); err != nil {
+		 }
+		 fmt.Println(m)
+		 return
  
 		 // write the n bytes read
 		 _, err2 := conn.Write(buf[0:n])

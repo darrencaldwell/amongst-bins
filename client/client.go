@@ -7,6 +7,7 @@
 	 "os"
 	 "fmt"
 	 "io/ioutil"
+	 "bufio"
 	 "github.com/golang/protobuf/proto"
  )
  
@@ -21,17 +22,29 @@
 	 checkError(err)
  
 	 conn, err := net.DialTCP("tcp", nil, tcpAddr)
+	 c := bufio.NewWriter(conn)
 	 checkError(err)
 	 fmt.Println("connected?")
  
 	g := &JoinGame{
 		Username: "aaa",
 	}
-	out, err := proto.Marshal(g)
-	if err != nil {
-		fmt.Println("Failed to encode address book:", err)
-	}
-	 _, err = conn.Write([]byte(out))
+  	out, err := proto.Marshal(g)
+  	if err != nil {
+  		fmt.Println("Failed to encode address book:", err)
+  	}
+	// write len of message
+	var size uint8 = uint8(len(out))
+	err = c.WriteByte(size)
+  	if err != nil {
+  		fmt.Println("Failed to encode address book:", err)
+  	}
+	 fmt.Println("ASDASD")
+	 // write message
+	 _, err = c.Write(out)
+  	if err != nil {
+  		fmt.Println("Failed to encode address book:", err)
+  	}
 	 checkError(err)
  
 	 //result, err := readFully(conn)
