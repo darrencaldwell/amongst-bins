@@ -17,20 +17,16 @@ SCREEN_WIDTH = 1080
 SCREEN_HEIGHT = 1920
 
 class Player(pygame.sprite.Sprite):
-    #     self.surf = pygame.image.load('assets/bins/grey bin/grey_left.svg').convert()
-    #     self.rect = self.surf.get_rect()
+
     def __init__(self): 
         super(Player, self).__init__()
         pygame.sprite.Sprite.__init__(self) 
         self.image = pygame.image.load('assets/bins/grey bin/grey_left.svg').convert() 
-        # resize the image
-        self.image.transform.scale(self.image, (width, height))
+        self.image = pygame.transform.scale(self.image, (300, 400))
         self.rect = self.image.get_rect() 
-        self.rect.center = (WIDTH / 2, HEIGHT / 2 )
+
 
 pygame.init()
-
-
 
 screen = pygame.display.set_mode((SCREEN_HEIGHT, SCREEN_WIDTH))
 player = Player()
@@ -49,13 +45,8 @@ while running:
         elif event.type == QUIT:
             running = False
 
-    screen.fill((0, 0, 255))
+    screen.fill((255, 255, 255))
 
-    player_center = (
-        (SCREEN_WIDTH-screen.get_width())/2,
-        (SCREEN_HEIGHT-screen.get_height())/2
-    ) 
-
-    screen.blit(player.rect, player_center)
+    screen.blit(player.image, (800,300))
     pygame.display.flip()
 
