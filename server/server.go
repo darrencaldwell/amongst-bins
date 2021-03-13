@@ -35,43 +35,66 @@
  func handleClient(conn net.Conn) {
 	 // close connection on exit
 	 defer conn.Close()
-	 c := bufio.NewReader(conn)
+	 rx := bufio.NewReader(conn)
+	 tx := bufio.NewWriter(conn)
 
 	 fmt.Println("connection made!")
  
 	 //infiniti boi to handle reqs from a client
 	 for {
 		// read type of message
-		num, err := c.ReadByte()
+		_, err := rx.ReadByte()
 		if err != nil {
+			fmt.Println("EchoJoinGame: error reading type")
 			return 
 		}
 		// read size
-		size, err := c.ReadByte()
+		size, err := rx.ReadByte()
 		if err != nil {
+			fmt.Println("EchoJoinGame: error reading size")
 			return 
 		}
 
 		 // read upto size bytes
 		 buf := make([]byte, size)
-		 n, err := io.ReadFull(c, buf[:])
+		 _, err = io.ReadFull(rx, buf[:])
 		 if err != nil {
-			fmt.Println("couldn't read")
+			 fmt.Println("EchoJoinGame: error reading message")
 			 return
 		 }
 
-		 m := &JoinGame{}
-		 if err := proto.Unmarshal(buf, m); err != nil {
+		 // respond
+
+		 m := &EchoJoinGame{}
+		 m.PlayerId = 2
+		 res, err := proto.Marshal(m)
+		 if err != nil {
+			 fmt.Println("EchoJoinGame: error marshalling")
+			 return
 		 }
-		 fmt.Println(m)
+
+		 // write protocol
+		if err = tx.WriteByte(2); err != nil {
+			 fmt.Println("EchoJoinGame: sending protocol type")
+			return
+		}
+		err = tx.Flush()
+		// write size
+		length := proto.Size(m)
+		err = tx.WriteByte(byte(length))
+		if err != nil {
+			 fmt.Println("EchoJoinGame: sending length")
+			return 
+		}
+		err = tx.Flush()
  
-		 // write the n bytes read
-		 _, err2 := conn.Write(buf[0:n])
+		 // write the n bytes
+		 _, err2 := tx.Write(res)
+		err = tx.Flush()
 		 if err2 != nil {
 			fmt.Println("couldn't write")
 			 return
 		 }
-		 fmt.Println("written")
 	 }
  }
  
