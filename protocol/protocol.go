@@ -5,7 +5,7 @@ import (
 	"github.com/golang/protobuf/proto"
 )
 
-func main() {
+func aaa() {
 	fmt.Println("Heelo nerd")
 	g := &JoinGame{
 		Username: "aaa",
