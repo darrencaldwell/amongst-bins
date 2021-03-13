@@ -2,144 +2,203 @@ import pygame
 from pygame.locals import *
 import os 
 
-os.environ['SDL_VIDEO_CENTERED'] = '1'
+#!/usr/bin/python3.4
+# Setup Python ----------------------------------------------- #
+# import pygame, sys
  
-from pygame.locals import (
-    RLEACCEL,
-    K_UP,
-    K_DOWN,
-    K_LEFT,
-    K_RIGHT,
-    K_ESCAPE,
-    KEYDOWN,
-    QUIT,
-)
-
-pygame.init()
-
-screen_height = 1080
-screen_width = 1920 
-screen=pygame.display.set_mode((screen_width, screen_height))
-
-def text_format(message, textFont, textSize, textColor):
-    newFont=pygame.font.Font(textFont, textSize)
-    newText=newFont.render(message, 0, textColor)
- 
-    return newText
- 
-# Colors
-white=(255, 255, 255)
-black=(0, 0, 0)
-gray=(50, 50, 50)
-red=(255, 0, 0)
-green=(0, 255, 0)
-blue=(0, 0, 255)
-yellow=(255, 255, 0)
- 
-# Game Fonts
-font = pygame.font.SysFont("comicsansms", 72)
- 
- 
-# Game Framerate
-clock = pygame.time.Clock()
-FPS=30
-
-def main_menu():
- 
-    menu=True
-    selected="start"
- 
-    while menu:
-        for event in pygame.event.get():
-            if event.type==pygame.QUIT:
-                pygame.quit()
-                quit()
-            if event.type==pygame.KEYDOWN:
-                if event.key==pygame.K_UP:
-                    selected="start"
-                elif event.key==pygame.K_DOWN:
-                    selected="quit"
-                if event.key==pygame.K_RETURN:
-                    if selected=="start":
-                        print("Start")
-                    if selected=="quit":
-                        pygame.quit()
-                        quit()
-
-        screen.fill(blue)
-        title=text_format('Pacifico.ttf', font, 90, yellow)
-        if selected=="start":
-            text_start=text_format("START", font, 75, white)
-        else:
-            text_start = text_format("START", font, 75, black)
-        if selected=="quit":
-            text_quit=text_format("QUIT", font, 75, white)
-        else:
-            text_quit = text_format("QUIT", font, 75, black)
-
-        title_rect=title.get_rect()
-        start_rect=text_start.get_rect()
-        quit_rect=text_quit.get_rect()
-
-        # Main Menu Text
-        screen.blit(title, (screen_width/2 - (title_rect[2]/2), 80))
-        screen.blit(text_start, (screen_width/2 - (start_rect[2]/2), 300))
-        screen.blit(text_quit, (screen_width/2 - (quit_rect[2]/2), 360))
-        pygame.display.update()
-        clock.tick(FPS)
-        pygame.display.set_caption("Python - Pygame Simple Main Menu Selection")
-
-                    
-
-
-# class Player(pygame.sprite.Sprite):
-#     #     self.surf = pygame.image.load('assets/bins/grey bin/grey_left.svg').convert()
-#     #     self.rect = self.surf.get_rect()
-#     def __init__(self): 
-#         super(Player, self).__init__()
-#         pygame.sprite.Sprite.__init__(self) 
-#         self.image = pygame.image.load('assets/bins/grey bin/grey_left.svg').convert() 
-#         # resize the image
-#         self.image = pygame.transform.scale(self.image, (20, 30))
-#         self.rect = self.image.get_rect() 
-SCREEN_WIDTH = 1080
-SCREEN_HEIGHT = 1920
-
-class Player(pygame.sprite.Sprite):
-
-    def __init__(self): 
-        super(Player, self).__init__()
-        pygame.sprite.Sprite.__init__(self) 
-        self.image = pygame.image.load('assets/bins/grey bin/grey_left.svg').convert() 
-        self.image = pygame.transform.scale(self.image, (300, 400))
-        self.rect = self.image.get_rect() 
-
+# # Setup pygame/window ---------------------------------------- #
+# mainClock = pygame.time.Clock()
+# from pygame.locals import *
 # pygame.init()
+# pygame.display.set_caption('main menu')
+# screen = pygame.display.set_mode((500, 500),0,32)
+ 
+# font = pygame.font.SysFont(None, 20)
+ 
+# def draw_text(text, font, color, surface, x, y):
+#     textobj = font.render(text, 1, color)
+#     textrect = textobj.get_rect()
+#     textrect.topleft = (x, y)
+#     surface.blit(textobj, textrect)
+ 
+# click = False
+ 
+# def main_menu():
+#     while True:
+ 
+#         screen.fill((0,0,0))
+#         draw_text('main menu', font, (255, 255, 255), screen, 20, 20)
+ 
+#         mx, my = pygame.mouse.get_pos()
+ 
+#         button_1 = pygame.Rect(50, 100, 200, 50)
+#         button_2 = pygame.Rect(50, 200, 200, 50)
+#         if button_1.collidepoint((mx, my)):
+#             if click:
+#                 game()
+#         if button_2.collidepoint((mx, my)):
+#             if click:
+#                 options()
+#         pygame.draw.rect(screen, (255, 0, 0), button_1)
+#         pygame.draw.rect(screen, (255, 0, 0), button_2)
+ 
+#         click = False
+#         for event in pygame.event.get():
+#             if event.type == QUIT:
+#                 pygame.quit()
+#                 sys.exit()
+#             if event.type == KEYDOWN:
+#                 if event.key == K_ESCAPE:
+#                     pygame.quit()
+#                     sys.exit()
+#             if event.type == MOUSEBUTTONDOWN:
+#                 if event.button == 1:
+#                     click = True
+ 
+#         pygame.display.update()
+#         mainClock.tick(60)
+ 
+ 
 
-pygame.init()
+# main_menu()
 
-# screen = pygame.display.set_mode((SCREEN_HEIGHT, SCREEN_WIDTH))
-# player = Player()
-# running = True
+import pygame 
+import sys 
+  
+  
+# initializing the constructor 
+pygame.init() 
+  
+# screen resolution 
+res = (720,720) 
+  
+# opens up a window 
+screen = pygame.display.set_mode(res) 
+  
+# white color 
+color = (255,255,255) 
+  
+# light shade of the button 
+color_light = (170,170,170) 
+  
+# dark shade of the button 
+color_dark = (100,100,100) 
+  
+# stores the width of the 
+# screen into a variable 
+width = screen.get_width() 
+  
+# stores the height of the 
+# screen into a variable 
+height = screen.get_height() 
+  
+# defining a font 
+smallfont = pygame.font.SysFont('Corbel',35) 
+  
+# rendering a text written in 
+# this font 
+text = smallfont.render('quit' , True , color) 
 
-# while running:
-#     # Look at every event in the queue
-#     for event in pygame.event.get():
-#         # Did the user hit a key?
-#         if event.type == KEYDOWN:
-#             # Was it the Escape key? If so, stop the loop.
-#             if event.key == K_ESCAPE:
-#                 running = False
+text1  = smallfont.render('game' , True , color) 
 
-#         # Did the user click the window close button? If so, stop the loop.
-#         elif event.type == QUIT:
-#             running = False
+text2  = smallfont.render('options' , True , color) 
 
-    screen.fill((255, 255, 255))
+def game():
+    running = True
+    while running:
+        screen.fill((0,0,0))
+        
+        draw_text('game', font, (255, 255, 255), screen, 20, 20)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+        
+        pygame.display.update()
+        mainClock.tick(60)
 
-    screen.blit(player.image, (800,300))
-    pygame.display.flip()
+def options():
+    running = True
+    while running:
+        screen.fill((0,0,0))
+ 
+        draw_text('options', font, (255, 255, 255), screen, 20, 20)
+        for event in pygame.event.get():
+            if event.type == QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == KEYDOWN:
+                if event.key == K_ESCAPE:
+                    running = False
+        
+        pygame.display.update()
+        mainClock.tick(60)
+ 
 
-main_menu()
-pygame.quit()
-quit()
+while True: 
+      
+    for ev in pygame.event.get(): 
+          
+        if ev.type == pygame.QUIT: 
+            pygame.quit() 
+                  
+        #checks if a mouse is clicked 
+        if ev.type == pygame.MOUSEBUTTONDOWN: 
+
+            #if the mouse is clicked on the 
+            # button the game is terminated 
+            if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
+                pygame.quit() 
+
+            # if width/2 <= mouse[0] <= width/2+140 and height/3 <= mouse[1] <= height/3+40: 
+            #     pygame.game()
+            # if width/2 <= mouse[0] <= width/2+140 and height/2.5 <= mouse[1] <= height/2.5+40: 
+            #     pygame.options()
+
+    # fills the screen with a color 
+    screen.fill((60,25,60)) 
+      
+    # stores the (x,y) coordinates into 
+    # the variable as a tuple 
+    mouse = pygame.mouse.get_pos() 
+      
+    # if mouse is hovered on a button it 
+    # changes to lighter shade  
+    if width/2 <= mouse[0] <= width/2+140 and height/2 <= mouse[1] <= height/2+40: 
+        pygame.draw.rect(screen,color_light,[width/2,height/2,140,40]) 
+          
+    else: 
+        pygame.draw.rect(screen,color_dark,[width/2,height/2,140,40]) 
+
+    # if mouse is hovered on a button it 
+    # changes to lighter shade  
+    if width/2 <= mouse[0] <= width/2+140 and height/3 <= mouse[1] <= height/3+40: 
+        pygame.draw.rect(screen,color_light,[width/2,height/3,140,40]) 
+          
+    else: 
+        pygame.draw.rect(screen,color_dark,[width/2,height/3, 140, 40]) 
+
+    # if mouse is hovered on a button it 
+    # changes to lighter shade  
+    if width/2 <= mouse[0] <= width/2+140 and height/2.5 <= mouse[1] <= height/2.5+40: 
+        pygame.draw.rect(screen,color_light,[width/2,height/2.5,140,40]) 
+          
+    else: 
+        pygame.draw.rect(screen,color_dark,[width/2,height/2.5, 140, 40]) 
+
+
+    # superimposing the text onto our button 
+    screen.blit(text, (width/2+50,height/2)) 
+
+    # superimposing the text onto our button 
+    screen.blit(text1, (width/2+50,height/3)) 
+      
+    # superimposing the text onto our button 
+    screen.blit(text2, (width/2+50,height/2.5)) 
+
+    # updates the frames of the game 
+    pygame.display.update() 
+
