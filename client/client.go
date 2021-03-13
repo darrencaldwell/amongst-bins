@@ -8,7 +8,6 @@
 	 "fmt"
 	 "io/ioutil"
 	 "github.com/golang/protobuf/proto"
-	 "github.com/CynicalCode21/amongst-bins/protocol"
  )
  
  func main() {
