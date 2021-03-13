@@ -41,14 +41,17 @@
  
 	 //infiniti boi to handle reqs from a client
 	 for {
+		// read type of message
+		num, err := c.ReadByte()
+		if err != nil {
+			return 
+		}
 		// read size
-		var size uint8
 		size, err := c.ReadByte()
 		if err != nil {
 			return 
 		}
-		fmt.Println("A")
-		fmt.Println(size)
+
 		 // read upto size bytes
 		 buf := make([]byte, size)
 		 n, err := io.ReadFull(c, buf[:])
@@ -56,11 +59,11 @@
 			fmt.Println("couldn't read")
 			 return
 		 }
+
 		 m := &JoinGame{}
 		 if err := proto.Unmarshal(buf, m); err != nil {
 		 }
 		 fmt.Println(m)
-		 return
  
 		 // write the n bytes read
 		 _, err2 := conn.Write(buf[0:n])

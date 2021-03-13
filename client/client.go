@@ -36,12 +36,14 @@
 	// write len of message
 	var size uint8 = uint8(len(out))
 	err = c.WriteByte(size)
+	c.Flush()
   	if err != nil {
   		fmt.Println("Failed to encode address book:", err)
   	}
 	 fmt.Println("ASDASD")
 	 // write message
 	 _, err = c.Write(out)
+	c.Flush()
   	if err != nil {
   		fmt.Println("Failed to encode address book:", err)
   	}
