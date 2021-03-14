@@ -12,8 +12,9 @@ message EchoJoinGame {
 }
 // 3
 message PlayerPosition {
-	int64 x = 1;
-	int64 y = 2;
+	int64 player_id = 1;
+	int64 x = 2;
+	int64 y = 3;
 }
 // 4
 message ClientMovement {

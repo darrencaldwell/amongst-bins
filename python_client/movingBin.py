@@ -11,17 +11,17 @@ from pygame.locals import (
     KEYDOWN,
     QUIT,
 )
-SCREEN_WIDTH = 1080
-SCREEN_HEIGHT = 1000
+SCREEN_WIDTH = 1280
+SCREEN_HEIGHT = 720
 RED = (255, 0, 0)
 GRAY = (150, 150, 150)
 
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self):
+    def __init__(self, w, h):
         super(Player, self).__init__()
-        self.image = pygame.image.load('assets/bins/grey bin/grey_left.svg')
+        self.image = pygame.image.load('../assets/bins/grey bin/grey_left.svg')
         self.image.convert()
         self.image = pygame.transform.scale(self.image, (200, 300))
         self.rect = self.image.get_rect()
@@ -49,7 +49,7 @@ class Player(pygame.sprite.Sprite):
 class Enemy(pygame.sprite.Sprite):
     def __init__(self):
         super(Enemy, self).__init__()
-        self.image = pygame.image.load('assets/banana.png')
+        self.image = pygame.image.load('../assets/banana.png')
         self.image.convert()
         self.image = pygame.transform.scale(self.image, (200, 300))
         self.surf = pygame.Surface((20, 10))
@@ -69,44 +69,44 @@ class Enemy(pygame.sprite.Sprite):
         if self.rect.right < 0:
             self.kill()
 
-pygame.init()
-w, h = 1080, 1000
-screen = pygame.display.set_mode((w, h))
-ADDENEMY = pygame.USEREVENT + 1
-pygame.time.set_timer(ADDENEMY, 2000)
-running = True
-moving = False
-player = Player()
-enemies = pygame.sprite.Group()
-all_sprites = pygame.sprite.Group()
-all_sprites.add(player)
-
-while running:
-    for event in pygame.event.get():
-        if event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
-                running = False
-        elif event.type == QUIT:
-            running = False
-        elif event.type == ADDENEMY:
-            new_enemy = Enemy()
-            enemies.add(new_enemy)
-            all_sprites.add(new_enemy)
-
-    pressed_keys = pygame.key.get_pressed()
-    player.update(pressed_keys)
-    enemies.update()
-    screen.fill(GRAY)
-
-    for entity in all_sprites:
-        screen.blit(entity.image, entity.rect)
-        pygame.draw.rect(screen, RED, entity.rect, 1)
-
-
-    if pygame.sprite.spritecollideany(player, enemies):
-        player.kill()
-        running = False
-
-    pygame.display.update()
-
-pygame.quit()
+#pygame.init()
+#w, h = 1080, 1000
+#screen = pygame.display.set_mode((w, h))
+#ADDENEMY = pygame.USEREVENT + 1
+#pygame.time.set_timer(ADDENEMY, 2000)
+#running = True
+#moving = False
+#player = Player()
+#enemies = pygame.sprite.Group()
+#all_sprites = pygame.sprite.Group()
+#all_sprites.add(player)
+#
+#while running:
+#    for event in pygame.event.get():
+#        if event.type == KEYDOWN:
+#            if event.key == K_ESCAPE:
+#                running = False
+#        elif event.type == QUIT:
+#            running = False
+#        elif event.type == ADDENEMY:
+#            new_enemy = Enemy()
+#            enemies.add(new_enemy)
+#            all_sprites.add(new_enemy)
+#
+#    pressed_keys = pygame.key.get_pressed()
+#    player.update(pressed_keys)
+#    enemies.update()
+#    screen.fill(GRAY)
+#
+#    for entity in all_sprites:
+#        screen.blit(entity.image, entity.rect)
+#        pygame.draw.rect(screen, RED, entity.rect, 1)
+#
+#
+#    if pygame.sprite.spritecollideany(player, enemies):
+#        player.kill()
+#        running = False
+#
+#    pygame.display.update()
+#
+#pygame.quit()
