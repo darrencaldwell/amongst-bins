@@ -61,7 +61,9 @@ def main_menu():
             if event.type == MOUSEBUTTONDOWN:
                 if event.button == 1:
                     click = True
- 
+    
+        draw_text('PLAY GAME', font, (255, 255, 255), screen, 50, 120)
+        draw_text('OPTIONS', font, (255, 255, 255), screen, 50, 220)
         pygame.display.update()
         mainClock.tick(60)
  
