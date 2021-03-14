@@ -2,9 +2,11 @@ package main
 
 import(
 	// "fmt"
+	"sync"
 )
 
 var game Game //change this to a map[id]->Game
+var mutex = &sync.Mutex{}
 
 type Game struct {
 	Players []Player
@@ -19,7 +21,7 @@ type Litter struct {
 
 type Player struct {
 	// conn net.Conn,
-	// Id int
+	Id int
 	Name string
 	Pos Pos
 }
@@ -32,7 +34,9 @@ type Pos struct {
 //
 func MovePlayer(id int, x int, y int) {
 	pos := Pos{x,y}
+	mutex.Lock()
 	game.Players[id].Pos = pos
+	mutex.Unlock()
 }
 
 
@@ -52,8 +56,10 @@ func CreateGame() {
 
 //return their index into the players array
 func Join(nickname string) int {
-	p := Player{nickname, Pos{0,0}}
+	mutex.Lock()
 	ind := len(game.Players)
+	p := Player{ind, nickname, Pos{0,0}}
+	mutex.Unlock()
 	game.Players = append(game.Players, p)
 	return ind
 }

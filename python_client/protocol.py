@@ -16,8 +16,8 @@ def connect():
 #   movement update
 
 def send_protocol_preface(s, protocol_type, protocol_len, m):
-    protocol_type = struct.pack("<I", protocol_type)
-    protocol_len = struct.pack("<I", protocol_len)
+    protocol_type = struct.pack("<B", protocol_type)
+    protocol_len = struct.pack("<B", protocol_len)
 
     s.sendall(protocol_type)
     s.sendall(protocol_len)
@@ -37,6 +37,15 @@ def join_game(s, username):
     # rec protocol number, length then get message
     protocol_rx = s.recv(1)
     protocol_rx = int.from_bytes(protocol_rx, "little")
+    print("join_game: protocol_rx = " + str(protocol_rx))
+    while protocol_rx == 5:
+        length_rx = s.recv(1)
+        length_rx = int.from_bytes(length_rx, "little")
+        # read message and parse it
+        s.recv(length_rx)
+        protocol_rx = s.recv(1)
+        protocol_rx = int.from_bytes(protocol_rx, "little")
+
     if protocol_rx != 2:
         return -1
     # read len of message
@@ -55,14 +64,24 @@ def rx_player_pos(s):
     spu = protocol_pb2.ServerPositionUpdate()
     protocol_rx = s.recv(1)
     protocol_rx = int.from_bytes(protocol_rx, "little")
-    if protocol_rx != 5:
-        return -1
+    while protocol_rx != 5:
+        print(protocol_rx)
+        # read len of message
+        length_rx = s.recv(1)
+        length_rx = int.from_bytes(length_rx, "little")
+        # read message and parse it
+        message = s.recv(length_rx)
+        protocol_rx = s.recv(1)
+        protocol_rx = int.from_bytes(protocol_rx, "little")
+
     # read len of message
     length_rx = s.recv(1)
     length_rx = int.from_bytes(length_rx, "little")
     # read message and parse it
     message = s.recv(length_rx)
-    return message
+    spu.ParseFromString(message)
+    print("rec: player pos's")
+    return spu
 
 
 def tx_player_pos(s, player_id, x, y):
@@ -73,6 +92,6 @@ def tx_player_pos(s, player_id, x, y):
     pp.y = y
     # serialize and send, sending protocol number and size of message first
     msg = pp.SerializeToString()
-    print(f"player {player_id} moved to ({x},{y})")
+    #print(f"player {player_id} moved to ({x},{y})")
 
     send_protocol_preface(s, 3, pp.ByteSize(), msg)

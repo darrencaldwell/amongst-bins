@@ -8,6 +8,7 @@ pygame.init()
 pygame.mixer.init()
 pygame.mixer.music.load("../assets/mus/yee.wav")
 pygame.mixer.music.play(-1)
+pygame.mixer.music.set_volume(0.1)
 pygame.display.set_caption('Main Menu')
 
 screen = pygame.display.set_mode((1280, 720),0,32)
@@ -71,7 +72,7 @@ def game():
 
     w, h = 1280, 720
     TX_POS = pygame.USEREVENT + 1
-    RX_POS = pygame.USEREVENT + 1
+    RX_POS = pygame.USEREVENT + 2
     pygame.time.set_timer(TX_POS, 100)
     pygame.time.set_timer(RX_POS, 100)
     running = True
@@ -91,8 +92,9 @@ def game():
                 protocol.tx_player_pos(s, player_id, player.rect.x, player.rect.y)
             elif event.type == RX_POS:
                 player_pos = protocol.rx_player_pos(s)
-                for player in player_pos:
-                    if player.player_id != player_id:
+                print(player_pos)
+                for r_player in player_pos.player_pos:
+                    if r_player.player_id != player_id:
                         pass
 
 

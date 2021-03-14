@@ -9,7 +9,7 @@
 	 "io"
 //	 "encoding/binary"
 	 "bufio"
-	//  "github.com/golang/protobuf/proto"
+	 "github.com/golang/protobuf/proto"
  )
  
 func main() {
@@ -36,12 +36,56 @@ func main() {
 	// close connection on exit
 	defer conn.Close()
 	rx := bufio.NewReader(conn)
-	// tx := bufio.NewWriter(conn)
+        tx := bufio.NewWriter(conn)
 
 	fmt.Println("connection made!")
 
 	//infiniti boi to handle a client
 	for {
+		// 
+		send_player := &ServerPositionUpdate{}
+		for _, p := range game.Players {
+			pp := &PlayerPosition{}
+			pp.PlayerId = int64(p.Id)
+			pp.X = int64(p.Pos.x)
+			pp.Y = int64(p.Pos.y)
+			send_player.PlayerPos = append(send_player.PlayerPos, pp)
+		}
+		res, err := proto.Marshal(send_player)
+		if err != nil {
+			fmt.Println("handleClient: error marshalling")
+			return
+		}
+		// write protocol
+		if err = tx.WriteByte(5); err != nil {
+			fmt.Println("EchoJoinGame: sending protocol type")
+			return
+		}
+		if err = tx.Flush(); err != nil {
+			return
+		}
+		// write size
+		length := proto.Size(send_player)
+		err = tx.WriteByte(byte(length))
+		if err != nil {
+			fmt.Println("EchoJoinGame: sending length")
+			return 
+		}
+		if err = tx.Flush(); err != nil {
+			return
+		}
+
+		// write the n bytes
+		_, err = tx.Write(res)
+		if err != nil {
+			fmt.Println("couldn't write")
+			return
+		}
+		if err = tx.Flush(); err != nil {
+			return
+		}
+
+
 		// read type of message
 		action, err := rx.ReadByte()
 		if err != nil {
@@ -61,8 +105,8 @@ func main() {
 		// read upto size bytes
 		buf := make([]byte, size)
 		n, err := io.ReadFull(rx, buf[:])
-		if err != nil {
-			fmt.Println("couldn't read")
+		if err != nil || n != int(size) {
+			fmt.Println("handleClient: failed to read correct amount")
 		}
 
 		fmt.Printf("read %d bytes\n", n)

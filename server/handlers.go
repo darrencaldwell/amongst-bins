@@ -66,5 +66,6 @@ func PlayerPositionHandler(conn net.Conn, buf []byte) {
 		fmt.Fprintf(os.Stderr, "error: %s\n", err.Error())
 		return
 	}
+	MovePlayer(int(m.PlayerId), int(m.X), int(m.Y))
 	fmt.Println(m)
 }
