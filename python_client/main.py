@@ -68,7 +68,9 @@ def game():
 
     w, h = 1280, 720
     TX_POS = pygame.USEREVENT + 1
+    RX_POS = pygame.USEREVENT + 1
     pygame.time.set_timer(TX_POS, 100)
+    pygame.time.set_timer(RX_POS, 100)
     running = True
     moving = False
     player = Player(w, h)
@@ -84,6 +86,8 @@ def game():
                 running = False
             elif event.type == TX_POS:
                 protocol.tx_player_pos(s, player_id, player.rect.x, player.rect.y)
+            elif event.type == RX_POS:
+                player_pos = protocol.rx_player_pos(s)
 
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
