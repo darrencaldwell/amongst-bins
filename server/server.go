@@ -9,7 +9,7 @@
 	 "io"
 //	 "encoding/binary"
 	 "bufio"
-	 "github.com/golang/protobuf/proto"
+	//  "github.com/golang/protobuf/proto"
  )
  
 func main() {
@@ -40,20 +40,23 @@ func main() {
 
 	fmt.Println("connection made!")
 
-	//infiniti boi to handle reqs from a client
+	//infiniti boi to handle a client
 	for {
 		// read type of message
 		action, err := rx.ReadByte()
 		if err != nil {
-			fmt.Println("EchoJoinGame: error reading type")
+			fmt.Println("handler: error reading type")
 			return 
 		}
+		fmt.Println("action:", action)
+
 		// read size
 		size, err := rx.ReadByte()
 		if err != nil {
-			fmt.Println("EchoJoinGame: error reading size")
+			fmt.Println("handler: error reading size")
 			return 
 		}
+		fmt.Println("msg size:", size)
 
 		// read upto size bytes
 		buf := make([]byte, size)
@@ -62,43 +65,27 @@ func main() {
 			fmt.Println("couldn't read")
 		}
 
+		fmt.Printf("read %d bytes\n", n)
+
 		switch action {
 		case 1:
+			fmt.Println("player joined")
 			JoinHandler(conn, buf)
 		case 3:
-			var m PlayerPosition
-			if err := proto.Unmarshal(buf, &m); err != nil {
-				fmt.Fprintf(os.Stderr, "error: %s", err.Error())
-				return
-			}
-			fmt.Println(m)
-		case 4:
-			var m ClientMovement
-			if err := proto.Unmarshal(buf, &m); err != nil {
-				fmt.Fprintf(os.Stderr, "error: %s", err.Error())
-				return
-			}
-			fmt.Println(m)
-		case 5:
-			var m ServerPositionUpdate
-			if err := proto.Unmarshal(buf, &m); err != nil {
-				fmt.Fprintf(os.Stderr, "error: %s", err.Error())
-				return
-			}
-			fmt.Println(m)
-		default:
-			fmt.Println("aaaaaaaa")
-
+			fmt.Println("player moved")
+			PlayerPositionHandler(conn, buf)
 			
+		default:
+			// fmt.Println("aaaaaaaa")
 		}
 
-		// write the n bytes read
-		_, err2 := conn.Write(buf[0:n])
-		if err2 != nil {
-		fmt.Println("couldn't write")
-			return
-		}
-		fmt.Println("written")
+		// // write the n bytes read
+		// _, err2 := conn.Write(buf[0:n])
+		// if err2 != nil {
+		// fmt.Println("couldn't write")
+		// 	return
+		// }
+		// fmt.Println("written")
 	}
 }
  

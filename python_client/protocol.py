@@ -29,6 +29,8 @@ def join_game(s, username):
     jg.username = username
     # serialize and send, sending protocol number and size of message first
     msg = jg.SerializeToString()
+    
+    print(f"{jg.username} joins, {jg.ByteSize()} bytes")
 
     send_protocol_preface(s, 1, jg.ByteSize(), msg)
 
@@ -44,7 +46,7 @@ def join_game(s, username):
     message = s.recv(length_rx)
     eg = protocol_pb2.EchoJoinGame()
     eg.ParseFromString(message)
-    print(eg)
+    print("connected player", eg.player_id)
 
     return eg.player_id
 
@@ -71,5 +73,6 @@ def tx_player_pos(s, player_id, x, y):
     pp.y = y
     # serialize and send, sending protocol number and size of message first
     msg = pp.SerializeToString()
+    print(f"player {player_id} moved to ({x},{y})")
 
     send_protocol_preface(s, 3, pp.ByteSize(), msg)

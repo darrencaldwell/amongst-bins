@@ -15,12 +15,13 @@ func JoinHandler(conn net.Conn, buf []byte) {
 
 	var m JoinGame
 	if err := proto.Unmarshal(buf, &m); err != nil {
-		fmt.Fprintf(os.Stderr, "error: %s", err.Error())
+		fmt.Fprintf(os.Stderr, "yeet: %s\n", err.Error())
 		return
 	}
 	fmt.Println(m)
 	resp := &EchoJoinGame{}
 	id := Join(m.Username)
+
 	resp.PlayerId = int32(id)
 
 	res, err := proto.Marshal(resp)
@@ -34,7 +35,9 @@ func JoinHandler(conn net.Conn, buf []byte) {
 		fmt.Println("EchoJoinGame: sending protocol type")
 		return
 	}
-	err = tx.Flush()
+	if err = tx.Flush(); err != nil {
+		return
+	}
 	// write size
 	length := proto.Size(resp)
 	err = tx.WriteByte(byte(length))
@@ -42,13 +45,26 @@ func JoinHandler(conn net.Conn, buf []byte) {
 		fmt.Println("EchoJoinGame: sending length")
 		return 
 	}
-	err = tx.Flush()
+	if err = tx.Flush(); err != nil {
+		return
+	}
 
 	// write the n bytes
-	_, err2 := tx.Write(res)
-	err = tx.Flush()
-	if err2 != nil {
+	_, err = tx.Write(res)
+	if err != nil {
 		fmt.Println("couldn't write")
 		return
 	}
+	if err = tx.Flush(); err != nil {
+		return
+	}
+}
+
+func PlayerPositionHandler(conn net.Conn, buf []byte) {
+	m := &PlayerPosition{}
+	if err := proto.Unmarshal(buf, m); err != nil {
+		fmt.Fprintf(os.Stderr, "error: %s\n", err.Error())
+		return
+	}
+	fmt.Println(m)
 }

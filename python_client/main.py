@@ -5,6 +5,9 @@ from movingBin import *
 mainClock = pygame.time.Clock()
 from pygame.locals import *
 pygame.init()
+pygame.mixer.init()
+pygame.mixer.music.load("../assets/mus/yee.wav")
+pygame.mixer.music.play(-1)
 pygame.display.set_caption('Main Menu')
 
 screen = pygame.display.set_mode((1280, 720),0,32)
