@@ -19,13 +19,19 @@ GRAY = (150, 150, 150)
 
 class Player(pygame.sprite.Sprite):
 
-    def __init__(self, w, h):
+    def __init__(self, w, h, id):
         super(Player, self).__init__()
         self.image = pygame.image.load('../assets/bins/grey bin/grey_left.svg')
         self.image.convert()
         self.image = pygame.transform.scale(self.image, (200, 300))
         self.rect = self.image.get_rect()
         self.rect.center = w//2, h//2
+        self.id = id
+        
+        
+    def move_to(self, x,y):
+        self.rect.x = x
+        self.rect.y = y
 
     def update(self, pressed_keys):
         if pressed_keys[K_UP]:
