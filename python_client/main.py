@@ -64,9 +64,11 @@ def main_menu():
 def game():
     # connect to server, get into game
     s = protocol.connect()
+    player_id = protocol.join_game(s, "banana")
 
-    w, h = 1080, 1000
-    #pygame.time.set_timer(ADDENEMY, 2000)
+    w, h = 1280, 720
+    TX_POS = pygame.USEREVENT + 1
+    pygame.time.set_timer(TX_POS, 100)
     running = True
     moving = False
     player = Player(w, h)
@@ -80,10 +82,8 @@ def game():
                     running = False
             elif event.type == QUIT:
                 running = False
-    #        elif event.type == ADDENEMY:
-    #            new_enemy = Enemy()
-    #            enemies.add(new_enemy)
-    #            all_sprites.add(new_enemy)
+            elif event.type == TX_POS:
+                protocol.tx_player_pos(s, player_id, player.rect.x, player.rect.y)
 
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
