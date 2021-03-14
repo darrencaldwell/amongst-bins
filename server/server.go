@@ -45,11 +45,13 @@ func main() {
 		// read type of message
 		action, err := rx.ReadByte()
 		if err != nil {
+			fmt.Println("EchoJoinGame: error reading type")
 			return 
 		}
 		// read size
 		size, err := rx.ReadByte()
 		if err != nil {
+			fmt.Println("EchoJoinGame: error reading size")
 			return 
 		}
 
