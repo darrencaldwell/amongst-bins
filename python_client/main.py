@@ -88,6 +88,10 @@ def game():
                 protocol.tx_player_pos(s, player_id, player.rect.x, player.rect.y)
             elif event.type == RX_POS:
                 player_pos = protocol.rx_player_pos(s)
+                for player in player_pos:
+                    if player.player_id != player_id:
+                        pass
+
 
         pressed_keys = pygame.key.get_pressed()
         player.update(pressed_keys)
